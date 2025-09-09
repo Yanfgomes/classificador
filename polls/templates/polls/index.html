@@ -1,0 +1,187 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de E-mail</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+            color: #333;
+        }
+
+        .email-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .email-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .email-form input[type="text"],
+        .email-form input[type="number"],
+        .email-form input[type="file"],
+        .email-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+
+        .email-form input:focus,
+        .email-form textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+            background: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .btn {
+            width: 100%;
+            background: #4a90e2;
+            color: #fff;
+            font-size: 1rem;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            background: #3a78c2;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .alert.success {
+            background: #e6ffed;
+            color: #256029;
+            border: 1px solid #a3f3b8;
+        }
+
+        .alert.error {
+            background: #ffe6e6;
+            color: #8b1d1d;
+            border: 1px solid #f5a3a3;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="container">
+            <h1>Cadastro de E-mail</h1>
+    
+            <form method="post" action="{% url 'polls:save' %}" enctype="multipart/form-data" class="email-form" >
+                {% csrf_token %}
+    
+                <div class="form-group">
+                    <label for="id_texto_email">Texto do E-mail</label>
+                    <textarea id="id_texto_email" name="texto_email" rows="5" required></textarea>
+                </div>
+    
+                <div class="form-group">
+                    <label for="id_arquivo_email">Arquivo do E-mail (opcional)</label>
+                    <input type="file" id="id_arquivo_email" name="arquivo_email" accept=".pdf, .txt">
+                </div>
+                
+                <button type="submit" class="btn">Salvar</button>
+            </form>
+        </div>
+        <br>
+        <div class="container">
+            <h1>Lista de E-mails</h1>
+    
+            {% if emails %}
+                <div class="result-box">
+                    <h3>Resultado da Avaliação</h3>
+                    <br>
+                    {% for email in emails %}
+                        <div class="result-item">
+                            <strong>Data:</strong> {{ email.data|date:"d/m/Y H:i" }}
+                        </div>
+                        <div class="result-item">
+                            <strong>Email:</strong> {{ email.texto_email|truncatewords:15 }}
+                        </div>
+                        <div class="result-item">
+                            <strong>Produtivo:</strong>
+                            {% if email.tipo_classificacao %}
+                                <span class="tag tag-yes">Sim</span>
+                            {% else %}
+                                <span class="tag tag-no">Não</span>
+                            {% endif %}
+                        </div>
+                        <div class="result-item">
+                            <strong>Resposta:</strong> {{ email.resposta_email }}
+                        </div>
+                        <div class="result-item">
+                            <strong>Classificação:</strong> {{ email.classificacao }}/10
+                        </div>
+                        <br><hr><br>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Nenhum e-mail cadastrado até agora.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
