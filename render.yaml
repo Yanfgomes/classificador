@@ -7,7 +7,7 @@ databases:
 services:
   - type: web
     plan: free
-    name: mysite
+    name: classificador
     runtime: python
     buildCommand: './build.sh'
     startCommand: 'python -m gunicorn mysite.asgi:application -k uvicorn.workers.UvicornWorker'
