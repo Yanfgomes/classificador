@@ -5,7 +5,7 @@ from openai import OpenAI
 from django.conf import settings
 import PyPDF2
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 def avaliar_email(texto_email, arquivo_path=None):
     # Conteúdo do anexo (se houver)

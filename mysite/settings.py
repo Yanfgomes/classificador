@@ -117,8 +117,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-OPENAI_API_KEY = "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"
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
